@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+  <head>
+    <meta charset="UTF-8" th:remove="tag">
+  </head>
+  <body>
+    <div layout:fragment="content">
+	  <div th:each="favorite: ${favoriteList}" th:object="${favorite}">
+		  <a th:href="@{/admin/userTweet/{id}(id=*{tweet.user.id})}" th:text="*{tweet.user.nickname}" />
+		  <a th:href="@{/admin/favorites/delete/{id}(id=*{id})}" class="nav-link">お気に入りに解除</a>
+		  <div th:text="*{tweet.body}" />
+	      <a th:href="@{/admin/detail/{id}(id=*{tweet.id})}" th:text="*{#dates.format(user.modifiedAt, 'yyyy年MM月dd日HH時mm分ss秒')}" />
+	  </div>
+    </div>
+  </body>
+</html>
+

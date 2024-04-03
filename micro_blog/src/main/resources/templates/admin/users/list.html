@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+  <head>
+    <meta charset="UTF-8" th:remove="tag">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <h1>ユーザ一覧</h1>
+      <table class="table table-striped mt-4">
+        <thead class="bg-primary text-white">
+          <tr>
+            <th>ユーザ名</th>
+            <th>フォロー数</th>
+            <th>フォロワー数</th>
+            <th>フォロー</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user: ${users}" th:object="${user}">
+            <td th:text="*{nickname}"></td>
+            <td th:text="*{follow.size()}"></td>
+			<td th:text="*{follower.size()}"></td>
+<!--			<td th:each="follow: ${user.follow}" th:object="${follow}">-->
+<!--			  <th:if="${follow.followUserId == id }">フォロー中</th>-->
+			  <td><a th:href="@{/admin/follow/create/{id}(id=*{id})}" class="nav-link">フォローする</a></td>
+<!--			</td>-->
+<!--		    <td th:if="${user.follow.size() == 0}">フォロー中</td>-->
+		  </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
