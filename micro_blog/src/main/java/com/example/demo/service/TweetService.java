@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.common.DataNotFoundException;
 import com.example.demo.dao.TweetDao;
 import com.example.demo.entity.Tweet;
+import com.example.demo.entity.TweetInfo;
 
 @Service
 public class TweetService implements BaseService<Tweet> {
@@ -36,6 +39,33 @@ public class TweetService implements BaseService<Tweet> {
 	@Override
 	public void deleteById(Integer id) {
 		dao.deleteById(id);
+	}
+	
+	public List<TweetInfo> exchangeTweetInfoList(List<Tweet> tweets, Integer userId){
+		List<TweetInfo> tweetList = new ArrayList<TweetInfo>();
+		for (var tweet: tweets) {
+			tweetList.add(this.exchangeTweetInfo(tweet, userId));
+		}
+		return tweetList;
+	}
+
+	public TweetInfo exchangeTweetInfo(Tweet tweet, Integer userId){
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日HH時mm分ss秒");
+		Boolean isForvarite = false;
+		TweetInfo tweetInfo = new TweetInfo();
+	    tweetInfo.setId(tweet.getId());
+		tweetInfo.setUserId(tweet.getUser().getId());
+		tweetInfo.setNickname(tweet.getUser().getNickname());
+		tweetInfo.setBody(tweet.getBody());
+		tweetInfo.setCreatedAt(dateFormat.format(tweet.getCreatedAt()));
+	    for (var forvarite: tweet.getFavorite()) {
+	    	if (forvarite.getUser().getId() == userId) {
+		    	isForvarite = true;
+		    break;
+		  }
+		}
+		tweetInfo.setIsFavorite(isForvarite);
+		return tweetInfo;
 	}
 }
 

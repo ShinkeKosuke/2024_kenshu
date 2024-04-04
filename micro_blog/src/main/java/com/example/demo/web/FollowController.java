@@ -25,7 +25,7 @@ public class FollowController {
 
 	
 	/*
-	 * お気に入り登録
+	 * フォロー登録
 	 */
 	@GetMapping(value = "/create/{userId}")
 	public String register(@PathVariable Integer userId, Model model, RedirectAttributes ra) {
@@ -35,10 +35,9 @@ public class FollowController {
 			Follow follow = new Follow();
 			follow.setFollowUserId(userId);
 			follow.setUserId(user.getId());
-			System.out.println(follow);
 			// 新規登録
 			followService.save(follow);
-			flash = new FlashData().success("新規作成しました");
+			flash = new FlashData().success("フォローしました");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			flash = new FlashData().danger("処理中にエラーが発生しました");

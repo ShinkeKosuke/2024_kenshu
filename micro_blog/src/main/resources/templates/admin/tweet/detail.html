@@ -6,10 +6,10 @@
   <body>
     <div layout:fragment="content">
 	  <div th:object="${tweet}">
-        <a th:href="@{/admin/userTweet/{id}(id=*{user.id})}" th:text="*{user.nickname}" />
-		<a th:href="@{/admin/favorites/create/{id}(id=*{id})}" class="nav-link">お気に入りに追加</a>	
+		<a th:href="@{/admin/userTweet/{id}(id=*{userId})}" th:text="*{nickname}" />
+		<td th:if="!*{isFavorite}"><a th:href="@{/admin/favorites/create/{id}(id=*{id})}" class="nav-link">お気に入りに追加</a></td>
 		<div th:text="*{body}" />
-		<a th:href="@{/admin/detail/{id}(id=*{id})}" th:text="*{#dates.format(user.modifiedAt, 'yyyy年MM月dd日HH時mm分ss秒')}" />
+		<a th:href="@{/admin/detail/{id}(id=*{id})}" th:text="*{createdAt}" />
 	  </div>
   </body>
 </html>

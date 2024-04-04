@@ -24,6 +24,10 @@ public class UserDao implements BaseDao<User> {
 		return this.repository.findById(id).orElseThrow(() -> new DataNotFoundException());
 	}
 
+	public List<User> findByIdNot(Integer id) {
+		return this.repository.findByIdNot(id);
+	}
+	
 	@Override
 	public void save(User user) {
 		this.repository.save(user);

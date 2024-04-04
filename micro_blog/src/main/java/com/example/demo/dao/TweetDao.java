@@ -14,9 +14,8 @@ public class TweetDao implements BaseDao<Tweet> {
 	@Autowired
 	TweetRepository repository;
 
-	@Override
 	public List<Tweet> findAll() {
-		return repository.findAll();
+		return repository.findAllByOrderByCreatedAtDesc();
 	}
 
 	@Override
@@ -26,7 +25,7 @@ public class TweetDao implements BaseDao<Tweet> {
 	
 	public List<Tweet> findByUserId(Integer userId) {
 		System.out.println(userId);
-		return this.repository.findByUserId(userId);
+		return this.repository.findByUserIdOrderByCreatedAtDesc(userId);
 	}
 
 	@Override

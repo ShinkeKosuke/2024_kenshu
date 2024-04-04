@@ -1,5 +1,8 @@
 package com.example.demo.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,9 @@ import com.example.demo.common.FlashData;
 import com.example.demo.common.ValidationGroups.Create;
 import com.example.demo.common.ValidationGroups.Update;
 import com.example.demo.entity.User;
+import com.example.demo.entity.UserForm;
+import com.example.demo.entity.UserInfo;
+import com.example.demo.service.MailService;
 import com.example.demo.service.UserService;
 
 @Controller
@@ -23,11 +29,15 @@ import com.example.demo.service.UserService;
 public class UsersController {
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	MailService mailService;
+
 	/*
 	 * ログイン画面表示
 	 */
 	@GetMapping(value = "/login")
-	public String loginForm(User user, Model model) {
+	public String loginForm(UserForm userForm, Model model) {
 		return "users/login";
 	}
 
@@ -36,8 +46,8 @@ public class UsersController {
 	 * 新規作成画面表示
 	 */
 	@GetMapping(value = "/create")
-	public String form(User user, Model model) {
-		model.addAttribute("user", user);
+	public String form(UserForm userForm, Model model) {
+		model.addAttribute("userForm", userForm);
 		return "users/create";
 	}
 
@@ -45,29 +55,38 @@ public class UsersController {
 	 * 新規登録
 	 */
 	@PostMapping(value = "/create")
-	public String register(@Validated(Create.class) User user, BindingResult result, Model model, RedirectAttributes ra) {
+	public String register(@Validated(Create.class) UserForm userForm, BindingResult result, Model model, RedirectAttributes ra) {
 		FlashData flash;
 		try {
+			User user = new User();
 			if (result.hasErrors()) {
 				return "users/create";
 			}
-			if (!userService.isUnique(user.getMail())) {
+			if (!userService.isUnique(userForm.getMail())) {
 				// emailが重複している
 				flash = new FlashData().danger("メールアドレスが重複しています");
 				model.addAttribute("flash", flash);
 				return "users/create";    
 			}
 			// 平文のパスワードを暗号文にする
-			user.encodePassword(user.getPassword());
+			user.encodePassword(userForm.getPassword());
+			user.setNickname(userForm.getNickname());
+			user.setMail(userForm.getMail());
+
 			// 新規登録
 			userService.save(user);
+			
 			user.setAuth(true);
 			flash = new FlashData().success("新規作成しました");
+		
+			// メール送信
+			mailService.sendMail(user.getMail());
+
 		} catch (Exception e) {
 			flash = new FlashData().danger("処理中にエラーが発生しました");
 		}
 		ra.addFlashAttribute("flash", flash);
-		return "redirect:/admin/tweet/";
+		return "redirect:/admin/";
 	}
 	
 	/*
@@ -75,7 +94,30 @@ public class UsersController {
 	 */
 	@GetMapping(value = "/list")
 	public String list(Model model) {
-		model.addAttribute("users", userService.findAll());
+		List<UserInfo> userList = new ArrayList<UserInfo>();
+		List<User> users = userService.findByIdNot();
+		
+		User loginUser = userService.getUserInfo();
+
+		for (var user: users) {
+			Boolean isFollow = false;
+			UserInfo userInfo = new UserInfo();
+		    userInfo.setId(user.getId());
+		    userInfo.setNickname(user.getNickname());
+		    userInfo.setFollowCount(user.getFollow().size());
+		    userInfo.setFollowerCount(user.getFollower().size());
+			for (var follower: user.getFollower()) {
+		    	if (follower.getUserId() == loginUser.getId() && follower.getFollowUserId() == user.getId()) {
+		    		isFollow = true;
+		    		break;
+		    	}
+			}
+
+			userInfo.setIsFollow(isFollow);
+			userList.add(userInfo);
+		}
+
+		model.addAttribute("users", userList);
 		return "admin/users/list";
 	}
 	
@@ -101,18 +143,18 @@ public class UsersController {
 	 * 更新
 	 */
 	@PostMapping(value = "/edit")
-	public String update(@Validated(Update.class) User editUser, BindingResult result, Model model, RedirectAttributes ra) {
+	public String update(@Validated(Update.class) User user, BindingResult result, Model model, RedirectAttributes ra) {
 		// SpringSecurity側からログインユーザの情報を取得する
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		FlashData flash;
 		try {
 			User authUser = userService.findByEmail(email);
 			if (result.hasErrors()) {
-				model.addAttribute(editUser);
+				model.addAttribute(user);
 				return "admin/users/edit";
 			}
 			// リクエスト値とマージ
-			authUser.encodePassword(editUser.getNickname());
+			authUser.setNickname(user.getNickname());
 			userService.save(authUser);
 			flash = new FlashData().success("更新しました");
 		} catch (DataNotFoundException e) {
@@ -121,6 +163,6 @@ public class UsersController {
 			flash = new FlashData().danger("エラーが発生しました");
 		}
 		ra.addFlashAttribute("flash", flash);
-		return "redirect:/admin/tweet/";
+		return "redirect:/admin/";
 	}
 }

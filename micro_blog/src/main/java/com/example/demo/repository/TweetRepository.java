@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.entity.Tweet;
 
 public interface TweetRepository extends JpaRepository<Tweet, Integer>{
-	public List<Tweet> findByUserId(Integer userId);
+	public List<Tweet> findAllByOrderByCreatedAtDesc();
+	public List<Tweet> findByUserIdOrderByCreatedAtDesc(Integer userId);
 }

@@ -49,7 +49,7 @@ public class User extends AbstractEntity implements UserDetails {
 	@Column(length = 255, nullable = false)
 	@NotEmpty(groups = { Create.class }, message = "パスワードは必須項目です")
 	private String password;
-
+	
 	@Column(length = 255, nullable = false)
 	@NotEmpty(groups = { Create.class }, message = "ニックネームは必須項目です")
 	private String nickname;

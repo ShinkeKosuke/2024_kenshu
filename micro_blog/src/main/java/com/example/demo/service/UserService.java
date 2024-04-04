@@ -28,6 +28,11 @@ public class UserService implements BaseService<User> {
 	public User findById(Integer id) throws DataNotFoundException {
 		return dao.findById(id);
 	}
+	
+	public List<User> findByIdNot() {
+		User user = this.getUserInfo();
+		return dao.findByIdNot(user.getId());		
+	}
 
 	@Override
 	public void save(User user) {
@@ -66,6 +71,7 @@ public class UserService implements BaseService<User> {
 		}
 	}
 	
+	
 	/*
 	 * SpringSecurity側の更新 
 	 */
@@ -81,7 +87,7 @@ public class UserService implements BaseService<User> {
 				userDetails.getPassword(),
 				userDetails.getAuthorities()));
 	}
-	
+		
 	
 	/*
 	 * ログインのメールアドレスからユーザ情報を取得 

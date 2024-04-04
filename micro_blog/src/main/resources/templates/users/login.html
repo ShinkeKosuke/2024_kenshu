@@ -5,7 +5,7 @@
   </head>
   <body>
     <div layout:fragment="content">
-      <form th:action="@{/users/login}" th:object="${user}" method="post">
+      <form th:action="@{/users/login}" th:object="${userForm}" method="post">
         <div class="form-group" th:if="${param.error}">
           <div class="alert alert-danger" role="alert">
             <span>メールアドレスまたはパスワードが一致しません</span>

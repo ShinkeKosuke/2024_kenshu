@@ -1,5 +1,7 @@
 package com.example.demo.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,7 @@ import com.example.demo.common.DataNotFoundException;
 import com.example.demo.common.FlashData;
 import com.example.demo.common.ValidationGroups.Create;
 import com.example.demo.entity.Tweet;
+import com.example.demo.entity.User;
 import com.example.demo.service.TweetService;
 import com.example.demo.service.UserService;
 
@@ -32,9 +35,12 @@ public class TweetController {
 	 */
 	@GetMapping(value = "/")
 	public String index(Tweet tweet, Model model) {
-		tweet.setUser(userService.getUserInfo());
+		User loginUser = userService.getUserInfo();
+		tweet.setUser(loginUser);
+
+		List<Tweet> tweetlist = tweetService.findAll();
 		model.addAttribute("tweet", tweet);
-		model.addAttribute("tweetList", tweetService.findAll());
+		model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUser.getId()));
 		return "admin/tweet/index";
 	}
 	
@@ -63,14 +69,13 @@ public class TweetController {
 	 */
 	@GetMapping(value = "/detail/{tweetId}")
 	public String tweet(@PathVariable Integer tweetId, Model model) {
-		FlashData flash;
 		try {
-			model.addAttribute("tweet", tweetService.findById(tweetId));
+			Tweet tweet = tweetService.findById(tweetId);
+			User loginUser = userService.getUserInfo();
+			model.addAttribute("tweet", tweetService.exchangeTweetInfo(tweet, loginUser.getId()));
 		} catch (DataNotFoundException e) {
-			flash = new FlashData().danger("該当データがありません");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			flash = new FlashData().danger("エラーが発生しました");
 		}
 		return "admin/tweet/detail";
 	}
@@ -80,7 +85,8 @@ public class TweetController {
 	 */
 	@GetMapping(value = "/userTweet/{userId}")
 	public String userTweet(@PathVariable Integer userId, Model model) {
-		model.addAttribute("userTweetList", tweetService.findByUserId(userId));
+		List<Tweet> tweetlist = tweetService.findByUserId(userId);
+		model.addAttribute("userTweetList", tweetService.exchangeTweetInfoList(tweetlist, userId));
 		return "admin/tweet/userTweet";
 	}
 }

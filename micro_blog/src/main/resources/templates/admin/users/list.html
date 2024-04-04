@@ -16,15 +16,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr th:each="user: ${users}" th:object="${user}">
+          <tr th:each="userInfo: ${users}" th:object="${userInfo}">
             <td th:text="*{nickname}"></td>
-            <td th:text="*{follow.size()}"></td>
-			<td th:text="*{follower.size()}"></td>
-<!--			<td th:each="follow: ${user.follow}" th:object="${follow}">-->
-<!--			  <th:if="${follow.followUserId == id }">フォロー中</th>-->
-			  <td><a th:href="@{/admin/follow/create/{id}(id=*{id})}" class="nav-link">フォローする</a></td>
-<!--			</td>-->
-<!--		    <td th:if="${user.follow.size() == 0}">フォロー中</td>-->
+            <td th:text="*{followCount}"></td>
+			<td th:text="*{followerCount}"></td>
+			<td th:if="*{isFollow}">フォロー中</td>
+			<td th:if="!*{isFollow}"><a th:href="@{/admin/follow/create/{id}(id=*{id})}" class="nav-link">フォローする</a></td>
 		  </tr>
         </tbody>
       </table>
