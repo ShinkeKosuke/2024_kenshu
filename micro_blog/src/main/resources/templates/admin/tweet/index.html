@@ -5,11 +5,16 @@
   </head>
   <body>
     <div layout:fragment="content">
-      <form th:action="@{/admin/create}" th:object="${tweet}" method="post">
+      <form th:action="@{/admin}" th:object="${tweet}" method="post">
+        <ul th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
+          <li th:each="err : ${#fields.errors('*')}">
+            <span th:text="${err}"></span>
+          </li>
+		</ul>
         <div class="form-group">
           <input type="hidden" th:field="*{id}">
           <input type="hidden" th:field="*{user}">
-          <textarea rows="3" cols="40" class="tweet-form" id="body" name="body" th:field="*{body}"></textarea>
+          <textarea rows="3" cols="40" class="tweet-form" id="body" name="body" th:field="*{body}" th:classappend="${#fields.hasErrors('body')} ? error"></textarea>
         </div>
         <div>
           <input class="btn btn-primary" type="submit" value="つぶやく">

@@ -79,8 +79,6 @@ public class UsersController {
 
 			// 新規登録
 			userService.save(user);
-
-			user.setAuth(true);
 			flash = new FlashData().success("新規作成しました");
 
 			// メール送信
@@ -90,7 +88,7 @@ public class UsersController {
 			flash = new FlashData().danger("処理中にエラーが発生しました");
 		}
 		ra.addFlashAttribute("flash", flash);
-		return "redirect:/users/login/";
+		return "redirect:/users/login";
 	}
 
 	/*
@@ -167,6 +165,6 @@ public class UsersController {
 			flash = new FlashData().danger("エラーが発生しました");
 		}
 		ra.addFlashAttribute("flash", flash);
-		return "redirect:/admin/";
+		return "redirect:/admin";
 	}
 }

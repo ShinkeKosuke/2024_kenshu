@@ -47,13 +47,18 @@ public class TweetController {
 	/*
 	 * つぶやき登録
 	 */
-	@PostMapping(value = "/create")
+	@PostMapping()
 	public String register(@Validated(Create.class) Tweet tweet, BindingResult result, Model model,
 			RedirectAttributes ra) {
 		FlashData flash;
 		try {
 			if (result.hasErrors()) {
-				return "redirect:/admin/tweet/";
+				User loginUser = userService.getUserInfo();
+				tweet.setUser(loginUser);
+				List<Tweet> tweetlist = tweetService.findAll();
+				model.addAttribute("tweet", tweet);
+				model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUser.getId()));
+				return "admin/tweet/index";
 			}
 			// 新規登録
 			tweetService.save(tweet);
@@ -62,7 +67,7 @@ public class TweetController {
 			flash = new FlashData().danger("処理中にエラーが発生しました");
 		}
 		ra.addFlashAttribute("flash", flash);
-		return "redirect:/admin/";
+		return "redirect:/admin";
 	}
 
 	/*
