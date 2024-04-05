@@ -22,11 +22,11 @@ import com.example.demo.service.TweetService;
 import com.example.demo.service.UserService;
 
 @Controller
-@RequestMapping(value = {"/admin"})
+@RequestMapping(value = { "/admin" })
 public class TweetController {
 	@Autowired
 	TweetService tweetService;
-	
+
 	@Autowired
 	UserService userService;
 
@@ -43,12 +43,13 @@ public class TweetController {
 		model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUser.getId()));
 		return "admin/tweet/index";
 	}
-	
+
 	/*
 	 * つぶやき登録
 	 */
 	@PostMapping(value = "/create")
-	public String register(@Validated(Create.class) Tweet tweet, BindingResult result, Model model, RedirectAttributes ra) {
+	public String register(@Validated(Create.class) Tweet tweet, BindingResult result, Model model,
+			RedirectAttributes ra) {
 		FlashData flash;
 		try {
 			if (result.hasErrors()) {
@@ -85,8 +86,14 @@ public class TweetController {
 	 */
 	@GetMapping(value = "/userTweet/{userId}")
 	public String userTweet(@PathVariable Integer userId, Model model) {
-		List<Tweet> tweetlist = tweetService.findByUserId(userId);
-		model.addAttribute("userTweetList", tweetService.exchangeTweetInfoList(tweetlist, userId));
+		try {
+			User user = userService.findById(userId);
+			List<Tweet> tweetlist = tweetService.findByUserId(userId);
+			model.addAttribute("user", user);
+			model.addAttribute("userTweetList", tweetService.exchangeTweetInfoList(tweetlist, userId));
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		return "admin/tweet/userTweet";
 	}
 }

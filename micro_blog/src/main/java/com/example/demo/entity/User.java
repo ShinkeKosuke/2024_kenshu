@@ -49,17 +49,17 @@ public class User extends AbstractEntity implements UserDetails {
 	@Column(length = 255, nullable = false)
 	@NotEmpty(groups = { Create.class }, message = "パスワードは必須項目です")
 	private String password;
-	
+
 	@Column(length = 255, nullable = false)
 	@NotEmpty(groups = { Create.class }, message = "ニックネームは必須項目です")
 	private String nickname;
-	
+
 	@OneToMany(mappedBy = "userId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	List<Follow> follow;
-	
+
 	@OneToMany(mappedBy = "followUserId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	List<Follow> follower;
-	
+
 	@Transient
 	private Boolean auth;
 
@@ -72,22 +72,21 @@ public class User extends AbstractEntity implements UserDetails {
 
 	// ユーザーに与えられる権限リストを返却するメソッド
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities(){
+	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;
 	}
-	
+
 	// ユーザー名を返却するメソッド
 	@Override
 	public String getUsername() {
 		return this.mail;
 	}
-	
+
 	// パスワードを返却するメソッド
 	@Override
 	public String getPassword() {
 		return this.password;
 	}
-
 
 	// アカウントの有効期限の状態を判定するメソッド
 	@Override
@@ -100,7 +99,7 @@ public class User extends AbstractEntity implements UserDetails {
 	public boolean isAccountNonLocked() {
 		return true;
 	}
-	
+
 	// 資格情報の有効期限の状態を判定するメソッド
 	@Override
 	public boolean isCredentialsNonExpired() {
@@ -113,4 +112,3 @@ public class User extends AbstractEntity implements UserDetails {
 		return true;
 	}
 }
-

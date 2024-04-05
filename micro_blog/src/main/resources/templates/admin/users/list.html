@@ -21,7 +21,7 @@
             <td th:text="*{followCount}"></td>
             <td th:text="*{followerCount}"></td>
             <td th:if="*{isFollow}">フォロー中</td>
-            <td th:if="!*{isFollow}"><a th:href="@{/admin/follow/create/{id}(id=*{id})}" class="nav-link">フォローする</a></td>
+            <td th:if="!*{isFollow}"><a th:href="@{/admin/follow/create/{id}(id=*{id})}">フォローする</a></td>
           </tr>
         </tbody>
       </table>

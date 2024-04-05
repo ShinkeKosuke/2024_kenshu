@@ -6,22 +6,29 @@
   <body>
     <div layout:fragment="content">
       <form th:action="@{/admin/users/edit}" th:object="${user}" method="post">
+		<input type="hidden" id="mail" th:field="*{mail}">
         <ul th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
           <li th:each="err : ${#fields.errors('*')}">
             <span th:text="${err}"></span>
           </li>
         </ul>
-        <h1 class="page-header">ユーザ情報更新</h1>
-        <div class="form-group" th:classappend="${#fields.hasErrors('mail')} ? error">
-          <label for="mail">ユーザ名</label>
-		  <label for="mail" th:text= "*{mail}"/>
-          <input type="hidden" id="mail" th:field="*{mail}">
-        </div>
-        <div class="form-group" th:classappend="${#fields.hasErrors('nickname')} ? error">
-          <label for="password">ニックネーム</label>
-          <input class="form-control" type="text" id="nickname" th:field="*{nickname}">
-        </div>
-      	<div>
+        <p>ユーザ情報更新</p>
+        <table>
+          <tbody>
+            <tr>
+              <th>ユーザ名</th>
+              <td><label for="mail" th:text= "*{mail}"/>
+              </td>
+            </tr>
+            <tr>
+              <th>ニックネーム</th>
+              <td>
+                <input class="form-control" type="text" id="nickname" th:field="*{nickname}">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
           <input class="btn btn-primary" type="submit" value="更新">
       	</div>
       </form>

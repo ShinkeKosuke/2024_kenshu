@@ -11,25 +11,25 @@
             <span th:text="${err}"></span>
           </li>
         </ul>
-        <h1 class="page-header">新規ユーザ登録</h1>
+        <p>新規ユーザ登録</p>
         <div class="form-group" th:classappend="${#fields.hasErrors('mail')} ? error">
-          <label for="mail">メールアドレス</label>
-          <input class="form-control" type="text" th:field="*{mail}">
+          <label for="mail">メールアドレス(ユーザID)</label>
+          <input class="form-area" type="text" th:field="*{mail}">
         </div>
         <div class="form-group" th:classappend="${#fields.hasErrors('password')} ? error">
           <label for="password">パスワード</label>
-          <input class="form-control" type="password" th:field="*{password}">
+          <input class="form-area" type="password" th:field="*{password}">
         </div>
         <div class="form-group" th:classappend="${#fields.hasErrors('confrimPassword')} ? error">
           <label for="password">パスワード(再認証)</label>
-          <input class="form-control" type="password" th:field="*{confrimPassword}">
+          <input class="form-area" type="password" th:field="*{confrimPassword}">
         </div>
         <div class="form-group" th:classappend="${#fields.hasErrors('nickname')} ? error">
           <label for="nickname">ニックネーム</label>
-          <input class="form-control" type="text" th:field="*{nickname}">
+          <input class="form-area" type="text" th:field="*{nickname}">
         </div>
         <div>
-          <input class="btn btn-primary" type="submit" value="登録">
+          <input class="btn btn-primary submit-btn" type="submit" value="登録">
         </div>
       </form>
     </div>

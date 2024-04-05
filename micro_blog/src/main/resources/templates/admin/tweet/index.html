@@ -6,22 +6,27 @@
   <body>
     <div layout:fragment="content">
       <form th:action="@{/admin/create}" th:object="${tweet}" method="post">
-		<div class="form-group">
-		  <label for="mail">ID</label>
-		  <input type="hidden" th:field="*{id}">
-		  <input type="hidden" th:field="*{user}">
-		  <input class="form-control" type="text" id="body" name="body" autofocus="autofocus">
-		</div>
+        <div class="form-group">
+          <input type="hidden" th:field="*{id}">
+          <input type="hidden" th:field="*{user}">
+          <textarea rows="3" cols="40" class="tweet-form" id="body" name="body" th:field="*{body}"></textarea>
+        </div>
         <div>
           <input class="btn btn-primary" type="submit" value="つぶやく">
         </div>
       </form>
-	  <div th:each="tweetInfo: ${tweetList}" th:object="${tweetInfo}">
-		<a th:href="@{/admin/userTweet/{id}(id=*{userId})}" th:text="*{nickname}" />
-		<td th:if="!*{isFavorite}"><a th:href="@{/admin/favorites/create/{id}(id=*{id})}" class="nav-link">お気に入りに追加</a></td>
-		<div th:text="*{body}" />
-		<a th:href="@{/admin/detail/{id}(id=*{id})}" th:text="*{createdAt}" />
+      <div class="tweet-block" th:each="tweetInfo: ${tweetList}" th:object="${tweetInfo}">
+        <div class="tweet line">
+          <a th:href="@{/admin/userTweet/{id}(id=*{userId})}" th:text="*{nickname}" />
+          <td th:if="!*{isFavorite}"><a th:href="@{/admin/favorites/create/{id}(id=*{id})}" class="navlink">お気に入りに追加</a></td>
+        </div>
+        <div class="tweet" th:text="*{body}" />
+        <div class="tweet">
+          <a  th:href="@{/admin/detail/{id}(id=*{id})}" th:text="*{createdAt}" />
+        </div>
+        <hr class="hr1">
       </div>
+    </div>
   </body>
 </html>
 

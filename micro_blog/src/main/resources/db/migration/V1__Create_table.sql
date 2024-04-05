@@ -20,7 +20,8 @@ DROP TABLE IF EXISTS follow;
 CREATE TABLE follow (
   id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'フォローID',
   user_id int(11) NOT NULL COMMENT 'ユーザID',
-  follow_user_id int(11) NOT NULL COMMENT 'フォローユーザID'
+  follow_user_id int(11) NOT NULL COMMENT 'フォローユーザID',
+  UNIQUE ( user_id, follow_user_id )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='フォロー';
 
 DROP TABLE IF EXISTS favorite;

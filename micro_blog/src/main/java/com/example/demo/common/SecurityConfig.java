@@ -23,51 +23,44 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		return
-			http.authorizeHttpRequests(authorize ->
-				authorize
-					.requestMatchers("/webjars/**", "/css/**", "/js/**").permitAll()
-					.requestMatchers("/users/login", "/admin/users/logout", "/users/create", "/error").permitAll()
-					.anyRequest().authenticated()
-			)
-			.formLogin(form ->
-			form
-			.loginProcessingUrl("/users/login")
-			.loginPage("/users/login")
-			.defaultSuccessUrl("/admin/")
-			.failureUrl("/users/login?error")
-	)
-	.logout(logout ->
-		logout
-			.logoutUrl("/admin/users/logout")
-			.logoutSuccessUrl("/users/login?logout")
-			.deleteCookies("JSESSIONID")
-	)
-	.exceptionHandling(exceptions ->
-		exceptions
-			.accessDeniedPage("/403")
-	)
-	.csrf()
-	.disable()
-	.build();
-}
+		return http.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/webjars/**", "/css/**", "/js/**").permitAll()
+				.requestMatchers("/users/login", "/admin/users/logout", "/users/create", "/error").permitAll()
+				.anyRequest().authenticated())
+				.formLogin(form -> form
+						.loginProcessingUrl("/")
+						.loginPage("/")
+						.loginProcessingUrl("/users/login")
+						.loginPage("/users/login")
+						.defaultSuccessUrl("/admin/")
+						.failureUrl("/users/login?error"))
+				.logout(logout -> logout
+						.logoutUrl("/admin/users/logout")
+						.logoutSuccessUrl("/users/login?logout")
+						.deleteCookies("JSESSIONID"))
+				.exceptionHandling(exceptions -> exceptions
+						.accessDeniedPage("/403"))
+				.csrf()
+				.disable()
+				.build();
+	}
 
-@Bean
-public AuthenticationProvider authenticationProvider() {
-DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-authProvider.setUserDetailsService(userDetailsService);
-authProvider.setPasswordEncoder(passwordEncoder());
-return authProvider;
-}
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+		authProvider.setUserDetailsService(userDetailsService);
+		authProvider.setPasswordEncoder(passwordEncoder());
+		return authProvider;
+	}
 
-@Bean
-public PasswordEncoder passwordEncoder() {
-return new BCryptPasswordEncoder();
-}
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-auth
-.userDetailsService(new UserDetailsServiceImpl())
-.passwordEncoder(passwordEncoder());
-}
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth
+				.userDetailsService(new UserDetailsServiceImpl())
+				.passwordEncoder(passwordEncoder());
+	}
 }
