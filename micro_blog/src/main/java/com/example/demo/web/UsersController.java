@@ -18,18 +18,18 @@ import com.example.demo.common.DataNotFoundException;
 import com.example.demo.common.FlashData;
 import com.example.demo.common.ValidationGroups.Create;
 import com.example.demo.common.ValidationGroups.Update;
+import com.example.demo.domain.UserInfo;
 import com.example.demo.entity.User;
-import com.example.demo.entity.UserForm;
-import com.example.demo.entity.UserInfo;
+import com.example.demo.form.UserForm;
 import com.example.demo.service.MailService;
 import com.example.demo.service.UserService;
 
 @Controller
-@RequestMapping(value = {"/users", "/admin/users"})
+@RequestMapping(value = { "/users", "/admin/users" })
 public class UsersController {
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	MailService mailService;
 
@@ -41,7 +41,6 @@ public class UsersController {
 		return "users/login";
 	}
 
-	
 	/*
 	 * 新規作成画面表示
 	 */
@@ -55,7 +54,8 @@ public class UsersController {
 	 * 新規登録
 	 */
 	@PostMapping(value = "/create")
-	public String register(@Validated(Create.class) UserForm userForm, BindingResult result, Model model, RedirectAttributes ra) {
+	public String register(@Validated(Create.class) UserForm userForm, BindingResult result, Model model,
+			RedirectAttributes ra) {
 		FlashData flash;
 		try {
 			User user = new User();
@@ -66,7 +66,7 @@ public class UsersController {
 				// emailが重複している
 				flash = new FlashData().danger("メールアドレスが重複しています");
 				model.addAttribute("flash", flash);
-				return "users/create";    
+				return "users/create";
 			}
 			// 平文のパスワードを暗号文にする
 			user.encodePassword(userForm.getPassword());
@@ -75,10 +75,10 @@ public class UsersController {
 
 			// 新規登録
 			userService.save(user);
-			
+
 			user.setAuth(true);
 			flash = new FlashData().success("新規作成しました");
-		
+
 			// メール送信
 			mailService.sendMail(user.getMail());
 
@@ -88,7 +88,7 @@ public class UsersController {
 		ra.addFlashAttribute("flash", flash);
 		return "redirect:/admin/";
 	}
-	
+
 	/*
 	 * ユーザ一覧画面表示
 	 */
@@ -96,21 +96,21 @@ public class UsersController {
 	public String list(Model model) {
 		List<UserInfo> userList = new ArrayList<UserInfo>();
 		List<User> users = userService.findByIdNot();
-		
+
 		User loginUser = userService.getUserInfo();
 
-		for (var user: users) {
+		for (var user : users) {
 			Boolean isFollow = false;
 			UserInfo userInfo = new UserInfo();
-		    userInfo.setId(user.getId());
-		    userInfo.setNickname(user.getNickname());
-		    userInfo.setFollowCount(user.getFollow().size());
-		    userInfo.setFollowerCount(user.getFollower().size());
-			for (var follower: user.getFollower()) {
-		    	if (follower.getUserId() == loginUser.getId() && follower.getFollowUserId() == user.getId()) {
-		    		isFollow = true;
-		    		break;
-		    	}
+			userInfo.setId(user.getId());
+			userInfo.setNickname(user.getNickname());
+			userInfo.setFollowCount(user.getFollow().size());
+			userInfo.setFollowerCount(user.getFollower().size());
+			for (var follower : user.getFollower()) {
+				if (follower.getUserId() == loginUser.getId() && follower.getFollowUserId() == user.getId()) {
+					isFollow = true;
+					break;
+				}
 			}
 
 			userInfo.setIsFollow(isFollow);
@@ -120,7 +120,7 @@ public class UsersController {
 		model.addAttribute("users", userList);
 		return "admin/users/list";
 	}
-	
+
 	/*
 	 * ログインユーザの編集画面表示
 	 */

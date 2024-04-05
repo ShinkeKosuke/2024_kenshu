@@ -5,12 +5,12 @@
   </head>
   <body>
     <div layout:fragment="content">
-	  <div th:each="tweetInfo: ${userTweetList}" th:object="${tweetInfo}">
-		<a th:href="@{/admin/userTweet/{id}(id=*{userId})}" th:text="*{nickname}" />
-		<td th:if="!*{isFavorite}"><a th:href="@{/admin/favorites/create/{id}(id=*{id})}" class="nav-link">お気に入りに追加</a></td>
-		<div th:text="*{body}" />
-		<a th:href="@{/admin/detail/{id}(id=*{id})}" th:text="*{createdAt}" />
-	  </div>
+      <div th:each="tweetInfo: ${userTweetList}" th:object="${tweetInfo}">
+        <a th:href="@{/admin/userTweet/{id}(id=*{userId})}" th:text="*{nickname}" />
+        <td th:if="!*{isFavorite}"><a th:href="@{/admin/favorites/create/{id}(id=*{id})}" class="nav-link">お気に入りに追加</a></td>
+        <div th:text="*{body}" />
+        <a th:href="@{/admin/detail/{id}(id=*{id})}" th:text="*{createdAt}" />
+      </div>
   </body>
 </html>
 

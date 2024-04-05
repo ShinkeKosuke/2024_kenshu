@@ -19,10 +19,10 @@
           <tr th:each="userInfo: ${users}" th:object="${userInfo}">
             <td th:text="*{nickname}"></td>
             <td th:text="*{followCount}"></td>
-			<td th:text="*{followerCount}"></td>
-			<td th:if="*{isFollow}">フォロー中</td>
-			<td th:if="!*{isFollow}"><a th:href="@{/admin/follow/create/{id}(id=*{id})}" class="nav-link">フォローする</a></td>
-		  </tr>
+            <td th:text="*{followerCount}"></td>
+            <td th:if="*{isFollow}">フォロー中</td>
+            <td th:if="!*{isFollow}"><a th:href="@{/admin/follow/create/{id}(id=*{id})}" class="nav-link">フォローする</a></td>
+          </tr>
         </tbody>
       </table>
     </div>

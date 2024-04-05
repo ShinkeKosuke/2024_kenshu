@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,16 +10,17 @@ import lombok.ToString;
 @Getter
 @Setter
 @Entity
-public class UserInfo {
+public class TweetInfo {
 	@Id
 	private Integer id;
 
+	private Integer userId;
+
 	private String nickname;
 
-	private Integer followCount;
+	private String body;
 	
-	private Integer followerCount;
+	private Boolean isFavorite;
 	
-	private Boolean isFollow;
+	private String createdAt;
 }
-

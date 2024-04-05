@@ -14,8 +14,8 @@
     <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
       <div class="container-fluid col-sm-10">
         <div class="navbar-header">
-		  <a sec:authorize="!authenticated" th:href="@{/}" class="navbar-brand">マイクロブログ</a>
-		  <a sec:authorize="authenticated" th:href="@{/admin/}" class="navbar-brand"> マイクロブログ</a>
+          <a sec:authorize="!authenticated" th:href="@{/}" class="navbar-brand">マイクロブログ</a>
+          <a sec:authorize="authenticated" th:href="@{/admin/}" class="navbar-brand"> マイクロブログ</a>
         </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -32,9 +32,9 @@
           </ul>
           <ul sec:authorize="authenticated" class="navbar-nav mr-auto">
             <li class="nav-item dropdown"><a th:href="@{/admin/users/edit}" class="nav-link">ユーザ情報更新</a></li>
-			<li class="nav-item dropdown"><a th:href="@{/admin/users/list}" class="nav-link">ユーザ一覧</a></li>
-			<li><a th:href="@{/admin/favorites/}" class="nav-link">お気に入り</a></li>
-			<li><a th:href="@{/admin/users/logout}" class="nav-link">ログアウト</a></li>
+            <li class="nav-item dropdown"><a th:href="@{/admin/users/list}" class="nav-link">ユーザ一覧</a></li>
+            <li><a th:href="@{/admin/favorites/}" class="nav-link">お気に入り</a></li>
+            <li><a th:href="@{/admin/users/logout}" class="nav-link">ログアウト</a></li>
           </ul>
           <ul sec:authorize="authenticated" class="navbar-nav ml-auto">
             <li class="navbar-text mr-3"><span sec:authentication="name" class="me-1"></span>さん</li>

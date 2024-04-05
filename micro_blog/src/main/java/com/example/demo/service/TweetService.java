@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.common.DataNotFoundException;
 import com.example.demo.dao.TweetDao;
+import com.example.demo.domain.TweetInfo;
 import com.example.demo.entity.Tweet;
-import com.example.demo.entity.TweetInfo;
 
 @Service
 public class TweetService implements BaseService<Tweet> {
