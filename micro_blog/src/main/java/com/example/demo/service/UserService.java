@@ -28,10 +28,10 @@ public class UserService implements BaseService<User> {
 	public User findById(Integer id) throws DataNotFoundException {
 		return dao.findById(id);
 	}
-	
+
 	public List<User> findByIdNot() {
 		User user = this.getUserInfo();
-		return dao.findByIdNot(user.getId());		
+		return dao.findByIdNot(user.getId());
 	}
 
 	@Override
@@ -62,6 +62,15 @@ public class UserService implements BaseService<User> {
 		return user;
 	}
 
+	public Boolean isAuth() {
+		Boolean isAuth = false;
+		User user = this.getUserInfo();
+		if (user.getAuth() == null) {
+			isAuth = true;
+		}
+		return isAuth;
+	}
+
 	public boolean isUnique(String email) {
 		try {
 			dao.findByEmail(email);
@@ -70,8 +79,7 @@ public class UserService implements BaseService<User> {
 			return true;
 		}
 	}
-	
-	
+
 	/*
 	 * SpringSecurity側の更新 
 	 */
@@ -87,8 +95,7 @@ public class UserService implements BaseService<User> {
 				userDetails.getPassword(),
 				userDetails.getAuthorities()));
 	}
-		
-	
+
 	/*
 	 * ログインのメールアドレスからユーザ情報を取得 
 	 */

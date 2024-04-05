@@ -38,7 +38,11 @@ public class UsersController {
 	 */
 	@GetMapping(value = "/login")
 	public String loginForm(UserForm userForm, Model model) {
-		return "users/login";
+		if (userService.isAuth()) {
+			return "redirect:/admin";
+		} else {
+			return "users/login";
+		}
 	}
 
 	/*
@@ -86,7 +90,7 @@ public class UsersController {
 			flash = new FlashData().danger("処理中にエラーが発生しました");
 		}
 		ra.addFlashAttribute("flash", flash);
-		return "redirect:/admin/";
+		return "redirect:/users/login/";
 	}
 
 	/*

@@ -33,7 +33,7 @@ public class TweetController {
 	/*
 	 * マイクロブログホーム画面
 	 */
-	@GetMapping(value = "/")
+	@GetMapping()
 	public String index(Tweet tweet, Model model) {
 		User loginUser = userService.getUserInfo();
 		tweet.setUser(loginUser);
