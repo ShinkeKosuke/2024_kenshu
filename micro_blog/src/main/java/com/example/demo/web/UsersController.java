@@ -34,18 +34,6 @@ public class UsersController {
 	MailService mailService;
 
 	/*
-	 * ログイン画面表示
-	 */
-	@GetMapping(value = "/login")
-	public String loginForm(UserForm userForm, Model model) {
-		if (userService.isAuth()) {
-			return "redirect:/admin";
-		} else {
-			return "users/login";
-		}
-	}
-
-	/*
 	 * 新規作成画面表示
 	 */
 	@GetMapping(value = "/create")
