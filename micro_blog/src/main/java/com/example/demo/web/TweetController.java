@@ -40,7 +40,7 @@ public class TweetController {
 
 		List<Tweet> tweetlist = tweetService.findAll();
 		model.addAttribute("tweet", tweet);
-		model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUser.getId(), true));
+		model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUser.getId()));
 		return "admin/tweet/index";
 	}
 
@@ -57,7 +57,7 @@ public class TweetController {
 				tweet.setUser(loginUser);
 				List<Tweet> tweetlist = tweetService.findAll();
 				model.addAttribute("tweet", tweet);
-				model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUser.getId(), true));
+				model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUser.getId()));
 				return "admin/tweet/index";
 			}
 			// 新規登録
@@ -95,7 +95,7 @@ public class TweetController {
 			User user = userService.findById(userId);
 			List<Tweet> tweetlist = tweetService.findByUserId(userId);
 			model.addAttribute("user", user);
-			model.addAttribute("userTweetList", tweetService.exchangeTweetInfoList(tweetlist, userId, false));
+			model.addAttribute("userTweetList", tweetService.exchangeTweetInfoList(tweetlist, userId));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
