@@ -14,15 +14,20 @@ public class TweetDao implements BaseDao<Tweet> {
 	@Autowired
 	TweetRepository repository;
 
+	@Override
 	public List<Tweet> findAll() {
-		return repository.findAllByOrderByCreatedAtDesc();
+		return repository.findAll();
+	}
+
+	public List<Tweet> findFollowTweet(Integer userId) {
+		return repository.findFollowTweet(userId);
 	}
 
 	@Override
 	public Tweet findById(Integer id) throws DataNotFoundException {
 		return this.repository.findById(id).orElseThrow(() -> new DataNotFoundException());
 	}
-	
+
 	public List<Tweet> findByUserId(Integer userId) {
 		System.out.println(userId);
 		return this.repository.findByUserIdOrderByCreatedAtDesc(userId);

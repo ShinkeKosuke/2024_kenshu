@@ -37,10 +37,11 @@ public class TweetController {
 	public String index(Tweet tweet, Model model) {
 		User loginUser = userService.getUserInfo();
 		tweet.setUser(loginUser);
+		Integer loginUserId = loginUser.getId();
 
-		List<Tweet> tweetlist = tweetService.findAll();
+		List<Tweet> tweetlist = tweetService.findFollowTweet(loginUserId);
 		model.addAttribute("tweet", tweet);
-		model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUser.getId()));
+		model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUserId));
 		return "admin/tweet/index";
 	}
 
@@ -55,9 +56,11 @@ public class TweetController {
 			if (result.hasErrors()) {
 				User loginUser = userService.getUserInfo();
 				tweet.setUser(loginUser);
-				List<Tweet> tweetlist = tweetService.findAll();
+				Integer loginUserId = loginUser.getId();
+
+				List<Tweet> tweetlist = tweetService.findFollowTweet(loginUserId);
 				model.addAttribute("tweet", tweet);
-				model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUser.getId()));
+				model.addAttribute("tweetList", tweetService.exchangeTweetInfoList(tweetlist, loginUserId));
 				return "admin/tweet/index";
 			}
 			// 新規登録
