@@ -26,7 +26,7 @@ public class TweetService implements BaseService<Tweet> {
 	public Tweet findById(Integer id) throws DataNotFoundException {
 		return dao.findById(id);
 	}
-	
+
 	public List<Tweet> findByUserId(Integer userId) {
 		return dao.findByUserId(userId);
 	}
@@ -40,32 +40,42 @@ public class TweetService implements BaseService<Tweet> {
 	public void deleteById(Integer id) {
 		dao.deleteById(id);
 	}
-	
-	public List<TweetInfo> exchangeTweetInfoList(List<Tweet> tweets, Integer userId){
+
+	public List<TweetInfo> exchangeTweetInfoList(List<Tweet> tweets, Integer userId, Boolean isFollowUser) {
 		List<TweetInfo> tweetList = new ArrayList<TweetInfo>();
-		for (var tweet: tweets) {
-			tweetList.add(this.exchangeTweetInfo(tweet, userId));
+		for (var tweet : tweets) {
+			if (!isFollowUser) {
+				tweetList.add(this.exchangeTweetInfo(tweet, userId));
+			} else {
+				if (tweet.getUser().getId() == userId) {
+					tweetList.add(this.exchangeTweetInfo(tweet, userId));
+				}
+				for (var follow : tweet.getUser().getFollower()) {
+					if (follow.getUserId() == userId) {
+						tweetList.add(this.exchangeTweetInfo(tweet, userId));
+					}
+				}
+			}
 		}
 		return tweetList;
 	}
 
-	public TweetInfo exchangeTweetInfo(Tweet tweet, Integer userId){
+	public TweetInfo exchangeTweetInfo(Tweet tweet, Integer userId) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日HH時mm分ss秒");
 		Boolean isForvarite = false;
 		TweetInfo tweetInfo = new TweetInfo();
-	    tweetInfo.setId(tweet.getId());
+		tweetInfo.setId(tweet.getId());
 		tweetInfo.setUserId(tweet.getUser().getId());
 		tweetInfo.setNickname(tweet.getUser().getNickname());
 		tweetInfo.setBody(tweet.getBody());
 		tweetInfo.setCreatedAt(dateFormat.format(tweet.getCreatedAt()));
-	    for (var forvarite: tweet.getFavorite()) {
-	    	if (forvarite.getUser().getId() == userId) {
-		    	isForvarite = true;
-		    break;
-		  }
+		for (var forvarite : tweet.getFavorite()) {
+			if (forvarite.getUser().getId() == userId) {
+				isForvarite = true;
+				break;
+			}
 		}
 		tweetInfo.setIsFavorite(isForvarite);
 		return tweetInfo;
 	}
 }
-
