@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.common.DataNotFoundException;
 import com.example.demo.common.PasswordHasher;
+import com.example.demo.common.UserWithNickname;
 import com.example.demo.dao.UserDao;
 import com.example.demo.entity.User;
 
@@ -84,11 +85,7 @@ public class UserService implements BaseService<User> {
 	 * SpringSecurity側の更新 
 	 */
 	private void updateSecurityContext(User user) {
-		UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-				.username(user.getMail())
-				.password(user.getPassword())
-				.roles("ADMIN")
-				.build();
+		UserDetails userDetails = new UserWithNickname(user.getMail(), user.getPassword(), user.getNickname());
 		SecurityContext context = SecurityContextHolder.getContext();
 		context.setAuthentication(new UsernamePasswordAuthenticationToken(
 				userDetails,
