@@ -13,7 +13,7 @@ public class UserWithdDpartment extends User {
 		this.departmentName = departmentName;
 	}
 
-	public String getNickname() {
+	public String getName() {
 		return userName;
 	}
 

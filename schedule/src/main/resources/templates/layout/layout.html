@@ -13,8 +13,8 @@
   <body>
     <div sec:authorize="authenticated" class="header nav">
 		<a th:href="@{/admin}" class="navlink">TOP</a>
-<!--      <p class="navlink">ユーザ名:<span sec:authentication="principal.userName"></span></p>-->
-<!--	  <p class="navlink">所属部署:<span sec:authentication="principal.departName"></span></p>-->
+      <p class="navlink">ユーザ名:<span sec:authentication="principal.name"></span></p>
+	  <p class="navlink">所属部署:<span sec:authentication="principal.departmentName"></span></p>
       <a th:href="@{/admin/users/logout}" class="navlink">ログアウト</a>
     </div>
     <div class="container-fluid mt-3">
