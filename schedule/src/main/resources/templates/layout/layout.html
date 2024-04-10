@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>	スケジュール管理</title>
+    <link th:href="@{/css/app.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" rel="stylesheet">
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  </head>
+  <body>
+    <div sec:authorize="authenticated" class="header nav">
+		<a th:href="@{/admin}" class="navlink">TOP</a>
+<!--      <p class="navlink">ユーザ名:<span sec:authentication="principal.userName"></span></p>-->
+<!--	  <p class="navlink">所属部署:<span sec:authentication="principal.departName"></span></p>-->
+      <a th:href="@{/admin/users/logout}" class="navlink">ログアウト</a>
+    </div>
+    <div class="container-fluid mt-3">
+      <div class="row">
+        <div class="col-sm-10 main mx-auto">
+		  <div th:if="${flash}" th:text="${flash.getMessage()}" th:class="${'alert alert-' + flash.getKey()}" role="alert"></div>
+        </div>
+        <div layout:fragment="content" class="col-sm-10 main mx-auto"></div>
+      </div>
+    </div>
+  </body>
+</html>

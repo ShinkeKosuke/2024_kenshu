@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+  <head>
+    <meta charset="UTF-8" th:remove="tag">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <a th:href="@{/admin/event/create}" class="navlink">予定作成</a>
+      <div class="sp-free-content-container-12" style="width: 80%;margin: 50px auto;">
+        <th:block>
+        <!-- 当月の表示 -->
+          <div class="mb-5" style="text-align: left;">
+            <a th:href="@{/admin/{date}(date=*{beforeMonth})}"th:text="${beforeMonth}"></a>
+			<a th:href="@{/admin/{date}(date=*{curenntMonth})}"th:text="${curenntMonth}"></a>
+			<a th:href="@{/admin/{date}(date=*{afterMonth})}"th:text="${afterMonth}"></a>
+          </div>
+          <!-- カレンダー -->
+          <table class="table table-bordered">
+            <tr>
+              <div th:each="week:${weeks}">
+                <th th:text="${week}">曜日</th>
+              </div>
+            </tr> 
+            <tr th:each="schedules:${calendarBoxNum}">
+              <td th:each="schedule:${schedules}">
+                <a th:href="@{/admin/daily/{date}(date=*{schedule.date})}" th:text="*{schedule.day}"></a>
+                <div th:if="${schedule.scheduleCount}">
+                  <span th:text="${schedule.scheduleCount}"></span>件の予定
+                </div>
+              </td>
+            </tr>
+          </table>
+        </th:block>
+	  </div>
+    </div>
+  </body>
+</html>

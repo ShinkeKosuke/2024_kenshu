@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+  <head>
+    <meta charset="UTF-8" th:remove="tag">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <form th:action="@{/admin/event/edit/{id}(id=*{id})}" th:object="${event}" method="post">
+        <input type="hidden" name="isDelete"  th:value="0">
+        <input type="hidden" name="registeredUserId"  th:value="${registeredUserId}">
+        <ul th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
+          <li th:each="err : ${#fields.errors('*')}">
+            <span th:text="${err}"></span>
+          </li>
+        </ul>
+        <p>予定変更</p>
+        <div class="form-group" th:classappend="${#fields.hasErrors('eventName')} ? error">
+          <label for="eventName">予定名称</label>
+          <input class="form-area" type="text" th:field="*{eventName}">
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('eventDate')} ? error">
+          <label for="eventDate">予定日</label>
+          <input class="form-area" type="date" th:field="*{eventDate}">
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('eventAllday')} ? error">
+          <label for="eventAllday">終日</label>
+          <input class="form-area" type="checkbox" th:field="*{eventAllday}" th:value="1">
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('eventStartTime')} ? error">
+          <label for="eventStartTime">開始時刻</label>
+          <input class="form-area" type="time" th:field="*{eventStartTime}">
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('eventEndTime')} ? error">
+          <label for="eventEndTime">終了時刻</label>
+          <input class="form-area" type="time" th:field="*{eventEndTime}">
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('user')} ? error">
+          <label for="user">ユーザ</label>
+		  <select name="user" class="form-area">
+            <option th:each="item : ${@userRepository.findAll()}" th:value="${item.id}" th:text="${item.name}"></option>
+          </select>
+		</div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('memo')} ? error">
+          <label for="memo">メモ</label>
+          <input class="form-area" type="text" th:field="*{memo}">
+       </div>
+        <div>
+          <input class="btn btn-primary submit-btn" type="submit" value="編集">
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
